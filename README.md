@@ -26,6 +26,10 @@
         ```
         pip install mysqlclient
         ```
+* Install [redis](https://redis.io/) :
+    ```
+    sudo apt-get install redis-server
+    ```
 
 ### Project Installation
 
@@ -42,6 +46,7 @@
     * `API_BASE_URL = 'http://localhost:8000/api'`
 1. Make migrations - `python3 manage.py makemigrations`
 1. Run migrations - `python3 manage.py migrate`
+1. Open a new terminal and start celery workers - `celery -A smlr worker -l info -P gevent -c 200`
 1. Start server - `python3 manage.py runserver`
 
 

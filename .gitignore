@@ -24,6 +24,9 @@ db.sqlite3
 # Celery
 celerybeat-schedule.db
 
+# Redis
+dump.rdb
+
 # Environments
 .env
 .venv
