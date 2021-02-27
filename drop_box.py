@@ -8,6 +8,6 @@ def dropbox_upload(text,questions):
     summarized_questions=bytes(questions,'utf-8')
     total_content= "Summary:"+text+"Possible Questions:"+questions
     total_content=bytes(total_content,'utf-8')
-    today = date.today().strftime("%m:%d:%Y")
+    today = date.today().strftime("%H:%M:%S,%d-%m-%Y")
     dbx.files_upload(total_content, "/smlr/"+today+".txt")
 
