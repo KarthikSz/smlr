@@ -32,6 +32,16 @@ SECRET_KEY = str(os.environ.get('APP_SECRET_KEY'))
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = (os.environ.get('DEBUG') == 'True')
 
+# Configure default AWS S3 Bucket parameters
+AWS_ACCESS_KEY_ID = str(os.environ.get('AWS_ACCESS_KEY_ID'))
+AWS_SECRET_ACCESS_KEY = str(os.environ.get('AWS_SECRET_ACCESS_KEY'))
+AWS_STORAGE_BUCKET_NAME = str(os.environ.get('AWS_STORAGE_BUCKET_NAME'))
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': 'max-age=86400',
+}
+AWS_LOCATION = str(os.environ.get('AWS_LOCATION'))
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -151,13 +161,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages', # for AWS S3
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -254,3 +265,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT= os.path.join(os.path.dirname(BASE_DIR), "media")
+
+# Override default AWS config params with custom storage
+DEFAULT_FILE_STORAGE = 'api.custom_storage.MediaStorage'
+
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 50  # 50M
+FILE_UPLOAD_MAX_MEMORY_SIZE = DATA_UPLOAD_MAX_MEMORY_SIZE

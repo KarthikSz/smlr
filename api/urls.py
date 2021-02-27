@@ -11,6 +11,7 @@ app_name = 'api'
 # API routes
 urlpatterns = [
 
-    path('', views.IndexView.as_view(), name='index'),
     url('ping/', views.PingView.as_view(), name='api-ping'),
+    url('process/video', views.ProcessVideoView.as_view(), name='process-video'),
+    path('', views.IndexView.as_view(), name='index'),
 ]
