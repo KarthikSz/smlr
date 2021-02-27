@@ -12,6 +12,6 @@ app_name = 'api'
 urlpatterns = [
 
     url('ping/', views.PingView.as_view(), name='api-ping'),
-    url('process/video', views.ProcessVideoView.as_view(), name='process-video'),
+    url('video/upload', views.UploadVideoView.as_view(), name='video-upload'),
     path('', views.IndexView.as_view(), name='index'),
 ]
