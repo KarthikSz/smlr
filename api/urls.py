@@ -8,9 +8,9 @@ from . import views
 # namespacing app
 app_name = 'api'
 
+# API routes
 urlpatterns = [
 
-    # User-auth routes
     path('', views.IndexView.as_view(), name='index'),
     url('ping/', views.PingView.as_view(), name='api-ping'),
 ]

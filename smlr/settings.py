@@ -10,23 +10,137 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
+import sys
+import environ
+
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+LOG_DIR = os.path.join(BASE_DIR, 'logs')
 
+# Read environment variables from .env
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '9irzok86&o)5!pukd&@@z=u8qv^vbxpt!9cf%t$7mfre1y=46('
+SECRET_KEY = str(os.environ.get('APP_SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = (os.environ.get('DEBUG') == 'True')
 
-ALLOWED_HOSTS = []
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse'
+        }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '[%(processName)s:%(threadName)s][%(filename)s:%(lineno)d][%(asctime)s][%(levelname)s] %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'stream': sys.stdout,
+            'formatter': 'verbose',
+        },
+        'general-logfile': {
+            'level': 'ERROR',
+            # 'filters': ['require_debug_false'],
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'general_err.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*100,  # 100MB
+            'backupCount': 10,
+        },
+        'api-info-logfile': {
+            'level': 'DEBUG',
+            # 'filters': ['require_debug_false'],
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'api_info.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*100,  # 100MB
+            'backupCount': 10,
+        },
+        'api-err-logfile': {
+            'level': 'WARNING',
+            # 'filters': ['require_debug_false'],
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'api_err.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*100,  # 100MB
+            'backupCount': 10,
+        },
+        'api-test-logfile': {
+            'level': 'DEBUG',
+            # 'filters': ['require_debug_false'],
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'api_test.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*100,  # 100MB
+            'backupCount': 10,
+        },
+        'api-views-logfile': {
+            'level': 'DEBUG',
+            # 'filters': ['require_debug_false'],
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': os.path.join(LOG_DIR, 'api_views.log'),
+            'formatter': 'verbose',
+            'maxBytes': 1024*1024*100,  # 100MB
+            'backupCount': 10,
+        },
+    },
+    'loggers': {
+        'gunicorn.errors': {
+            'level': 'ERROR',
+            'handlers': ['general-logfile'],
+            'propagate': True,
+        },
+        'django': {
+            'level': 'DEBUG',
+            'handlers': ['console', 'general-logfile'],
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'level': 'ERROR',
+            'handlers': ['console', 'general-logfile'],
+            'propagate': True,
+        },
+        '': {
+            'level': 'WARNING',
+            'handlers': ['api-err-logfile'],
+            'propagate': True,
+        },
+        'api': {
+            'level': 'DEBUG',
+            'handlers': ['api-info-logfile'],
+            'propagate': True
+        },
+    }
+}
 
+
+ALLOWED_HOSTS = ['*']
+
+SESSION_COOKIE_SECURE = False
+
+# CORS rules
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:9000'
+]
 
 # Application definition
 
@@ -73,12 +187,30 @@ WSGI_APPLICATION = 'smlr.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+DATABASES = {}
+
+if 'test' in sys.argv or 'test_coverage' in sys.argv:  # Covers regular testing and django-coverage\
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.environ.get('DB_NAME'),
+            'TEST_NAME': os.environ.get('DB_NAME'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'HOST': os.environ.get('DB_HOST'),
+            'PORT': os.environ.get('DB_PORT'),
+            'NAME': os.environ.get('DB_NAME'),
+            "USER": os.environ.get('DB_USERNAME'),
+            "PASSWORD": os.environ.get('DB_PASSWORD'),
+            'OPTIONS': {
+                'charset': os.environ.get('DB_CHARSET'),
+            }
+        }
+    }
 
 
 # Password validation
@@ -105,7 +237,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -118,3 +250,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
