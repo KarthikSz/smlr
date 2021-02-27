@@ -139,7 +139,7 @@ SESSION_COOKIE_SECURE = False
 # CORS rules
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:9000'
+    'http://localhost:3020'
 ]
 
 # Application definition
@@ -251,3 +251,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT= os.path.join(os.path.dirname(BASE_DIR), "media")
