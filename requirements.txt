@@ -1,2 +1,6 @@
 pandas==1.2.2
+transformers==3.0.0
+torch==1.7.1
+dropbox==11.2.0
 boto3==1.17.17
+nltk==3.5
