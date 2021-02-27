@@ -152,6 +152,23 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:3020'
 ]
 
+# REDIS & CELERY STUFF
+REDIS_HOST = os.environ.get('REDIS_HOST')
+REDIS_PORT = os.environ.get('REDIS_PORT')
+REDIS_USERNAME = os.environ.get('REDIS_USERNAME')
+REDIS_PASSWORD = os.environ.get('REDIS_PASSWORD')
+
+BROKER_URL = ('redis://{}:{}').format(REDIS_HOST, REDIS_PORT)
+
+if (REDIS_PASSWORD):
+    BROKER_URL = ('redis://{}:{}@{}:{}').format(REDIS_USERNAME, REDIS_PASSWORD, REDIS_HOST, REDIS_PORT)
+
+CELERY_RESULT_BACKEND = BROKER_URL
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Kolkata'
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -161,12 +178,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'api.apps.ApiConfig',
+    'corsheaders',
     'storages', # for AWS S3
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
