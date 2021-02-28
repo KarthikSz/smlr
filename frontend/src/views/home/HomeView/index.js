@@ -11,6 +11,7 @@ import Toolbar from './Toolbar';
 import ProductCard from './ProductCard';
 import data from './data';
 
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.background.dark,

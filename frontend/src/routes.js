@@ -12,6 +12,7 @@ import NotFoundView from 'src/views/errors/NotFoundView';
 import ProductListView from 'src/views/product/ProductListView';
 import RegisterView from 'src/views/auth/RegisterView';
 import SettingsView from 'src/views/settings/SettingsView';
+import GetSummary from 'src/views/getsummary/GetSummary';
 
 const routes = [
   {
@@ -25,6 +26,7 @@ const routes = [
       { path: 'upload', element: <UploadView /> },
       { path: 'products', element: <ProductListView /> },
       { path: 'settings', element: <SettingsView /> },
+      { path: 'getsummary', element: <GetSummary />},
       { path: '*', element: <Navigate to="/404" /> }
     ]
   },
