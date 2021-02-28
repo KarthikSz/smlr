@@ -11,7 +11,7 @@ from django.views.generic import View
 from api.custom_storage import VideoStorage
 from api.decorators.response import JsonResponseDecorator
 from api.tasks import process_video
-from api.models import Videos
+from api.models import Videos, Summary, Questions
 
 logger = logging.getLogger(__name__)
 
@@ -93,4 +93,45 @@ class UploadVideoView(View):
         return {
             'video': video,
             'file_url': file_url
+        }
+
+
+@method_decorator(JsonResponseDecorator, name='dispatch')
+class ProcessedVideosView(View):
+    """
+    """
+
+    def get(self, request):
+        videos = Videos.objects.all()
+
+        videos = model_to_dict(videos)
+        
+        return {
+            'videos': videos,
+        }
+
+@method_decorator(JsonResponseDecorator, name='dispatch')
+class ProcessedVideoView(View):
+    """
+    """
+
+    def get(self, request):
+        video_id = request.GET.get('id')
+        
+        video = Videos.objects.get(
+            video_id=video_id
+        )
+        summary = Summary.objects.get(
+            video_id=video
+        )
+        questions = Questions.objects.filter(
+            video_id=video
+        )
+
+        video = model_to_dict(video)
+        
+        return {
+            'video': model_to_dict(video),
+            'summary': model_to_dict(summary),
+            'questions': model_to_dict(questions)
         }
