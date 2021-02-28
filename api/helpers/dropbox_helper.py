@@ -4,5 +4,5 @@ from api.helpers.api_fns.drop_box import dropbox_upload
 
 logger = logging.getLogger(__name__)
 
-def generate_questions(summary,questions):
+def update_dropbox(summary,questions):
     dropbox_upload(summary,questions)
