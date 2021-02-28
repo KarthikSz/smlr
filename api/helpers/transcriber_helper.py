@@ -1,14 +1,8 @@
 import json
 import logging
+from api.helpers.api_fns.transcribe import amazon_transcribe
 
 logger = logging.getLogger(__name__)
 
 def transcribe(filename):
-    """
-    Returns transcribed text generated from the video
-    """
-    transcribed_text = 'testing text'
-    
-    # TODO: Integrate transcibers
-    
-    return transcribed_text
+    return amazon_transcribe(filename)
