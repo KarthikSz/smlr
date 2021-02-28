@@ -27,16 +27,18 @@ def process_video(self, video_obj):
             video_id=video,
             text=summarized_text
         )
-        print(summary)
         logger.info('Summarized text!')
         
         # Generate questions from summary
         logger.info('Generating questions...')
-        questions = generate_questions(summary)
-        for question in questions:
+        questions = generate_questions(summarized_text)
+        for item in questions:
+            print(item)
+            print(item["question"])
             Questions.objects.create(
                 video_id=video,
-                question=question
+                question=item["question"],
+                answer=item["answer"],
             )
         logger.info('Generated questions!')
 

@@ -18,3 +18,4 @@ class Questions(models.Model):
     question_id = models.AutoField(primary_key=True)
     video_id = models.ForeignKey(Videos, db_column='video_id', on_delete=models.CASCADE)
     question = models.TextField(max_length=2000, null=False)
+    answer = models.TextField(max_length=2000, null=True)

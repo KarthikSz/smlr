@@ -31,7 +31,7 @@ def check_job_name(job_name):
   return job_name
 
 def amazon_transcribe(audio_file_name):
-  job_uri = "s3://smlr/"+audio_file_name
+  job_uri = "s3://smlr/videos/"+audio_file_name
   # Usually, I put like this to automate the process with the file name
   # "s3://bucket_name" + audio_file_name 
 
