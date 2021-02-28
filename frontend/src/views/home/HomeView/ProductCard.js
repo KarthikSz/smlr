@@ -1,4 +1,7 @@
 import React, { useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
+
+
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import {
@@ -39,6 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
   const ProductCard = ({ className, product, ...rest }) => {
   const classes = useStyles();
+  const navigate = useNavigate();
 
   return (
    
@@ -47,7 +51,9 @@ const useStyles = makeStyles((theme) => ({
       {...rest}
     >
       <CardActionArea 
-      // onClick = {}
+      onClick = { () => {
+        navigate('/app/getsummary/')
+      }}
       >
       <CardContent>
         <Box
@@ -63,11 +69,11 @@ const useStyles = makeStyles((theme) => ({
           gutterBottom
           variant="h4"
         >
-          Obama 
+          {product.title}
         </Typography>
         <CardMedia
           className={classes.media}
-          image="../../../Assets/cards/thumb.png"
+          image={product.image}
           
         />
       </CardContent>

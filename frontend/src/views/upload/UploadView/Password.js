@@ -11,6 +11,12 @@ import {
   TextField,
   makeStyles
 } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
 
 import { uploadVideo } from '../../../api/api.helper';
 
@@ -27,6 +33,15 @@ const Password = ({ className, ...rest }) => {
     confirm: ''
   });
   const [videoLocation, setVideoLocation] = useState(null);
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChange = (event) => {
     setValues({
@@ -58,6 +73,7 @@ const Password = ({ className, ...rest }) => {
   };
 
   const handleFileUpload = async (e, field) => {
+    setOpen(true);
     const uploadResponse = await uploadVideo(videoLocation);
     if(uploadResponse.data.status_code==200){
       setVideoLocation(uploadResponse.data.data);
@@ -69,69 +85,84 @@ const Password = ({ className, ...rest }) => {
   };
 
   return (
-    <form
-      className={clsx(classes.root, className)}
-      {...rest}
-    >
-      <Card>
-        <CardHeader
-          subheader="Upload Video"
-          title="Process Lectures"
-        />
-        <Divider />
-        <CardContent>
-          {/* <TextField
-            fullWidth
-            label="Password"
-            margin="normal"
-            name="password"
-            onChange={handleChange}
-            type="password"
-            value={values.password}
-            variant="outlined"
-          /> */}
+    <div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            <CircularProgress />
 
-          <Box>
-            <div class="form-group file-area">
-                  {/* <label for="images">Images <span>Your images should be at least 400x300 wide</span></label> */}
-              <input
-                type="file"
-                name="video"
-                id="video"
-                required="required"
-                onChange={(e) => { e.persist(); handleFileChange(e, 'video'); }}
-              />
-              <div class="file-dummy">
-                <div class="success">Great, your file is selected.</div>
-                <div class="default">Select a video to upload</div>
-              </div>
-            </div>  
-            {/* <Button variant="contained" component="label" className={classes.button}>
-              Choose File
-              <input
-                type="file"
-                onChange={(e) => { e.persist(); handleFileChange(e, 'video'); }}
-                style={{ display: 'none' }}
-              />
-            </Button> */}
-          </Box>
-        </CardContent>
-        <Divider />
-        <Box
-          display="flex"
-          justifyContent="flex-end"
-          p={2}
-        >
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => handleFileUpload('video')}
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
+      <form
+        className={clsx(classes.root, className)}
+        {...rest}
+      >
+        <Card>
+          <CardHeader
+            subheader="Upload Video"
+            title="Process Lectures"
+          />
+          <Divider />
+          <CardContent>
+            {/* <TextField
+              fullWidth
+              label="Password"
+              margin="normal"
+              name="password"
+              onChange={handleChange}
+              type="password"
+              value={values.password}
+              variant="outlined"
+            /> */}
+
+            <Box>
+              <div class="form-group file-area">
+                    {/* <label for="images">Images <span>Your images should be at least 400x300 wide</span></label> */}
+                <input
+                  type="file"
+                  name="video"
+                  id="video"
+                  required="required"
+                  onChange={(e) => { e.persist(); handleFileChange(e, 'video'); }}
+                />
+                <div class="file-dummy">
+                  <div class="success">Great, your file is selected.</div>
+                  <div class="default">Select a video to upload</div>
+                </div>
+              </div>  
+              {/* <Button variant="contained" component="label" className={classes.button}>
+                Choose File
+                <input
+                  type="file"
+                  onChange={(e) => { e.persist(); handleFileChange(e, 'video'); }}
+                  style={{ display: 'none' }}
+                />
+              </Button> */}
+            </Box>
+          </CardContent>
+          <Divider />
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            p={2}
           >
-            Upload
-          </Button>
-        </Box>
-      </Card>
-    </form>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => handleFileUpload('video')}
+            >
+              Upload
+            </Button>
+          </Box>
+        </Card>
+      </form>
+    </div>
   );
 };
 

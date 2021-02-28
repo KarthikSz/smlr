@@ -22,7 +22,12 @@ const viewAllProcessedVideos = async () => {
 	return get(`${serverURL}/processed/`);
 };
 
+const getProcessedVideo = async (id) => {
+	return get(`${serverURL}/processed/info`, {params: {id}});
+};
+
 export {
     uploadVideo,
-    viewAllProcessedVideos
+	viewAllProcessedVideos,
+	getProcessedVideo
 };

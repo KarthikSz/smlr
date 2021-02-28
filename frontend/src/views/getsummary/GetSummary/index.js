@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Box,
     Container,
@@ -11,6 +11,8 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+
+import { getProcessedVideo } from '../../../api/api.helper'
 
 const useStyles = makeStyles({
     root: {
@@ -33,6 +35,29 @@ export default function GetSummary() {
     const classes = useStyles();
     const bull = <span className={classes.bullet}>•</span>;
 
+    const [summary, setSummary] = useState(null);
+    const [questions, setQuestions] = useState([]);
+  
+    	// useEffects
+	useEffect(()=>{
+		
+
+	}, [])
+
+    useEffect( () => {
+		async function fetchAPI() {
+			try {
+                const id = localStorage.getItem("id");
+                const responseData = await getProcessedVideo(id);
+                setSummary(responseData.data.data.summary)
+                setQuestions(responseData.data.data.questions)
+			} catch(error) {
+				console.error(error.toString());
+			}
+		}
+		fetchAPI();
+    }, []);
+    
     return (
         <div>
             <Card className={classes.root} variant="outlined">
@@ -49,11 +74,14 @@ export default function GetSummary() {
                         align="center"
                         color="textPrimary"
                         variant="body1"
+                        style={{
+                            padding: '50px',
+                            lineHeight: '30px'
+                        }}
                     >
-                        fetched summary
+                        
                     </Typography>
-
-
+                        {summary}
                 </CardContent>
             </Card>
             <Card className={classes.root} variant="outlined">
@@ -70,8 +98,16 @@ export default function GetSummary() {
                         align="center"
                         color="textPrimary"
                         variant="body1"
+                        style={{
+                            padding: '50px',
+                            lineHeight: '30px'
+                        }}
                     >
-                        fetch questions
+                        <ul>
+                        {questions.map((question) => (
+                            <li>{question}</li>
+                        ))}
+                        </ul>
                     </Typography>
 
                 </CardContent>
