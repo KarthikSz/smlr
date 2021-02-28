@@ -46,7 +46,7 @@ tokenizers==0.10.1
 toml==0.10.2
 torch==1.7.1
 tqdm==4.58.0
-transformers==4.3.3
+transformers==3.0.0
 typing-extensions==3.7.4.3
 urllib3==1.26.3
 vine==5.0.0
@@ -54,3 +54,6 @@ wcwidth==0.2.5
 wrapt==1.12.1
 zope.event==4.5.0
 zope.interface==5.2.0
+pandas==1.2.2
+dropbox==11.2.0
+nltk==3.5
