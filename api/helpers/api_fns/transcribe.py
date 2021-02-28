@@ -3,9 +3,9 @@ import time
 import boto3
 
 transcribe = boto3.client('transcribe',
-aws_access_key_id = "AKIAJK6DO2WYFHAX7NMA",
-aws_secret_access_key = "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",
-region_name = "ap-south-1")
+aws_access_key_id = "",
+aws_secret_access_key = "",
+region_name = "")
 
 def check_job_name(job_name):
   job_verification = True
